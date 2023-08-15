@@ -13,4 +13,7 @@
     <string name="addtask_message" />
     <string name="alltasks_label">All Tasks</string>
     <string name="alltasksimgplaceholder">Image place holder for All Tasks page</string>
+    <string name="username_input">Username</string>
+    <string name="saveusername_btn">Save</string>
+    <string name="userprofile_accessicon">Icon used to navigate to user profile page</string>
 </resources>
