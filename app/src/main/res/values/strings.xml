@@ -11,4 +11,6 @@
     <string name="addtask_tasktitle">My Task</string>
     <string name="addtask_descriptioninput">Do something...</string>
     <string name="addtask_message" />
+    <string name="alltasks_label">All Tasks</string>
+    <string name="alltasksimgplaceholder">Image place holder for All Tasks page</string>
 </resources>
