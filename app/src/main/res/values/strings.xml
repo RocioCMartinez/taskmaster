@@ -1,3 +1,16 @@
 <resources>
-    <string name="app_name">taskmaster</string>
+    <string name="app_name">TaskMaster</string>
+    <string name="mytasks_label">My Tasks</string>
+    <string name="placeholder_image">placeholder image on main activity</string>
+    <string name="add_task">ADD TASK</string>
+    <string name="all_tasks">ALL TASKS</string>
+    <string name="addtask_label">Add Task</string>
+    <string name="addtask_title">Task Title</string>
+    <string name="addtask_description">Task Description</string>
+    <string name="addtaskactivity_button">ADD TASK</string>
+    <string name="addtask_tasktitle">My Task</string>
+    <string name="addtask_descriptioninput">Do something...</string>
+    <string name="addtask_message" />
+    <string name="alltasks_label">All Tasks</string>
+    <string name="alltasksimgplaceholder">Image place holder for All Tasks page</string>
 </resources>
