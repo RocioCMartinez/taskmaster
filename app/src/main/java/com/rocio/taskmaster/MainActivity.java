@@ -18,6 +18,7 @@ import com.rocio.taskmaster.activities.TaskDetailsActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TASK_NAME_EXTRA_TAG = "taskName";
     SharedPreferences preferences;
 
     @Override
@@ -29,6 +30,8 @@ public class MainActivity extends AppCompatActivity {
 
         setUpUserProfileButton();
         setUpTaskOneButton();
+        setupTaskTwoButton();
+        setupTaskThreeButton();
         setUpAddTaskFormButton();
         setUpAllTasksButton();
     }
@@ -54,7 +57,27 @@ public class MainActivity extends AppCompatActivity {
 
     void setUpTaskOneButton() {
         ((Button)findViewById(R.id.MainActivityTaskOneBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskOneBtn)).getText().toString();
             Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
+            startActivity(goToTaskDetails);
+        });
+    }
+
+    void setupTaskTwoButton() {
+        ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).getText().toString();
+            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
+            startActivity(goToTaskDetails);
+        });
+    }
+
+    void setupTaskThreeButton() {
+        ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).getText().toString();
+            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
             startActivity(goToTaskDetails);
         });
     }

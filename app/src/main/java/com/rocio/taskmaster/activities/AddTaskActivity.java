@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
 
 import com.rocio.taskmaster.R;
@@ -26,7 +27,8 @@ public class AddTaskActivity extends AppCompatActivity {
         //2/3: Add an onClickListener
         addTaskActivityButton.setOnClickListener(view -> {
             //4: Define the callback method
-            ((TextView)findViewById(R.id.AddTaskActivityMessage)).setText("Submitted!");
+//            ((TextView)findViewById(R.id.AddTaskActivityMessage)).setText("Submitted!");
+            Toast.makeText(AddTaskActivity.this, "Submitted!", Toast.LENGTH_SHORT).show();
 
         });
     }
