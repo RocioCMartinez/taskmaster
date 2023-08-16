@@ -1,23 +1,85 @@
 package com.rocio.taskmaster;
 
+import static com.rocio.taskmaster.activities.UserProfileActivity.USERNAME_TAG;
+
 import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.preference.PreferenceManager;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.TextView;
 
-import com.rocio.taskmaster.activities.AddTask;
-import com.rocio.taskmaster.activities.AllTasks;
+import com.rocio.taskmaster.activities.AddTaskActivity;
+import com.rocio.taskmaster.activities.AllTasksActivity;
+import com.rocio.taskmaster.activities.TaskDetailsActivity;
+import com.rocio.taskmaster.activities.UserProfileActivity;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TASK_NAME_EXTRA_TAG = "taskName";
+    SharedPreferences preferences;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
+        setUpUserProfileButton();
+        setUpTaskOneButton();
+        setupTaskTwoButton();
+        setupTaskThreeButton();
         setUpAddTaskFormButton();
         setUpAllTasksButton();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        setupUsernameTextView();
+    }
+
+    void setUpUserProfileButton(){
+        ((ImageView)findViewById(R.id.MainActivityUserProfileButton)).setOnClickListener(view -> {
+            Intent goToUserProfileActivityIntent = new Intent(MainActivity.this, UserProfileActivity.class);
+            startActivity(goToUserProfileActivityIntent);
+        });
+    }
+
+    void setupUsernameTextView(){
+        String userName = preferences.getString(USERNAME_TAG, "No username");
+        ((TextView)findViewById(R.id.MainActivityUserName)).setText(userName + "'s Tasks");
+    }
+
+    void setUpTaskOneButton() {
+        ((Button)findViewById(R.id.MainActivityTaskOneBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskOneBtn)).getText().toString();
+            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
+            startActivity(goToTaskDetails);
+        });
+    }
+
+    void setupTaskTwoButton() {
+        ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).getText().toString();
+            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
+            startActivity(goToTaskDetails);
+        });
+    }
+
+    void setupTaskThreeButton() {
+        ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).setOnClickListener(view -> {
+            String taskName = ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).getText().toString();
+            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
+            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
+            startActivity(goToTaskDetails);
+        });
     }
 
     void setUpAddTaskFormButton(){
@@ -30,7 +92,7 @@ public class MainActivity extends AppCompatActivity {
             System.out.println("Add task button was pressed!");
 
             //create + trigger Intent(w/startActivity)
-            Intent goToAddTaskIntent = new Intent(MainActivity.this, AddTask.class);
+            Intent goToAddTaskIntent = new Intent(MainActivity.this, AddTaskActivity.class);
             startActivity(goToAddTaskIntent);
 
         });
@@ -45,7 +107,7 @@ public class MainActivity extends AppCompatActivity {
             //4: Define the callback method
 
             //create + trigger Intent(w/startActivity)
-            Intent goToAllTasksIntent = new Intent(MainActivity.this, AllTasks.class);
+            Intent goToAllTasksIntent = new Intent(MainActivity.this, AllTasksActivity.class);
             startActivity(goToAllTasksIntent);
 
         });

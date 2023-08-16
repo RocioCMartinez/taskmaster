@@ -13,4 +13,8 @@
     <string name="addtask_message" />
     <string name="alltasks_label">All Tasks</string>
     <string name="alltasksimgplaceholder">Image place holder for All Tasks page</string>
+    <string name="username_input">Username</string>
+    <string name="saveusername_btn">Save</string>
+    <string name="userprofile_accessicon">Icon used to navigate to user profile page</string>
+    <string name="description_lorenipsum">Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.</string>
 </resources>
