@@ -20,6 +20,12 @@ Day3:
 ![Home Page](src/main/images/Day3HomePage.png)
 ![Task Details](src/main/images/Day3TaskDetails.png)
 
+Day4:
+
+![Home Page](src/main/images/Day4homepg.png)
+![Task Details](src/main/images/Day4taskdetails.png)
+![Add Task](src/main/images/Day4AddTaskpg.png)
+
 ### Resources
 - Alex Chao
 - ChatGPT (troubleshooting errors)

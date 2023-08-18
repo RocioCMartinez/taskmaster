@@ -12,6 +12,8 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
+import androidx.room.Room;
+
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -19,10 +21,10 @@ import android.widget.TextView;
 
 import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.AllTasksActivity;
-import com.rocio.taskmaster.activities.TaskDetailsActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
 import com.rocio.taskmaster.adapters.TaskListRecyclerViewAdapter;
-import com.rocio.taskmaster.models.State;
+import com.rocio.taskmaster.database.TaskMasterDatabase;
+import com.rocio.taskmaster.models.TaskStateEnum;
 import com.rocio.taskmaster.models.Task;
 
 import java.util.ArrayList;
@@ -30,11 +32,17 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
+//    public static final Long TASK_ID_EXTRA_TAG = Task.getId(); // new line***
+    public static final String TASK_DESCRIPTION_TAG = "taskDescription";
     SharedPreferences preferences;
 
 //    Step 2-2: Make some data items
     List<Task> tasks = new ArrayList<>();
 
+
+    TaskMasterDatabase taskmasterDatabase;
+    public static final String DATABASE_NAME = "rocio_taskmaster";
+    TaskListRecyclerViewAdapter adapter;
 
 
     @Override
@@ -44,12 +52,13 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        setUpDatabase();
         setUpUserProfileButton();
 //        setUpTaskOneButton();
 //        setupTaskTwoButton();
 //        setupTaskThreeButton();
 //   Instances must be created before RecyclerView
-        createTaskInstances();
+//        createTaskInstances();
         setupTaskRecyclerView();
 
         setUpAddTaskFormButton();
@@ -62,6 +71,19 @@ public class MainActivity extends AppCompatActivity {
         super.onResume();
 
         setupUsernameTextView();
+        updateTaskListFromDatabase();
+    }
+
+    void setUpDatabase(){
+        taskmasterDatabase = Room.databaseBuilder(
+                getApplicationContext(),
+                TaskMasterDatabase.class,
+                DATABASE_NAME)
+                .fallbackToDestructiveMigration() //turn off in production
+                .allowMainThreadQueries()
+                .build();
+
+        tasks = taskmasterDatabase.taskDao().findAll(); //to test db works, not returning value
     }
 
     void setUpUserProfileButton(){
@@ -132,7 +154,7 @@ public class MainActivity extends AppCompatActivity {
 //        Step 2-3: Hand data items from Main Activity to our RecyclerViewAdapter
 //        TaskListRecyclerViewAdapter adapter = new TaskListRecyclerViewAdapter(tasks);
 //        Step 3-2: Hand in the Activity context to the adapter
-        TaskListRecyclerViewAdapter adapter = new TaskListRecyclerViewAdapter(tasks, this);
+        adapter = new TaskListRecyclerViewAdapter(tasks, this);
         taskListRecyclerView.setAdapter(adapter);
 
     }
@@ -168,11 +190,17 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void createTaskInstances(){
-//        Step 2-2 cont.: Fill list w/ data
-        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", State.NEW));
-        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", State.ASSIGNED));
-        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", State.COMPLETE));
+//    void createTaskInstances(){
+////        Step 2-2 cont.: Fill list w/ data
+//        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", TaskStateEnum.NEW));
+//        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", TaskStateEnum.ASSIGNED));
+//        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", TaskStateEnum.COMPLETE));
+//
+//    }
 
+    void updateTaskListFromDatabase(){
+        tasks.clear();
+        tasks.addAll(taskmasterDatabase.taskDao().findAll());
+        adapter.notifyDataSetChanged();
     }
 }
