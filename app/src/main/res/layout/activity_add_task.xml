@@ -39,6 +39,7 @@
         android:inputType="text"
         android:minHeight="48dp"
         android:textColorHint="#00BCD4"
+        android:imeOptions="actionDone"
         app:layout_constraintStart_toStartOf="@+id/AddTaskTitle"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskTitle" />
 
@@ -63,6 +64,7 @@
         android:inputType="text"
         android:minHeight="48dp"
         android:textColorHint="#00BCD4"
+        android:imeOptions="actionDone"
         app:layout_constraintStart_toStartOf="@+id/AddTaskDescription"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityTaskTitle" />
 
