@@ -13,22 +13,26 @@ import android.graphics.Rect;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
 import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.AllTasksActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
 import com.rocio.taskmaster.adapters.TaskListRecyclerViewAdapter;
-import com.rocio.taskmaster.models.Task;
-import com.rocio.taskmaster.models.TaskStateEnum;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "MainActivity";
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
 //    public static final Long TASK_ID_EXTRA_TAG = Task.getId(); // new line***
     public static final String TASK_DESCRIPTION_TAG = "taskDescription";
@@ -52,9 +56,9 @@ public class MainActivity extends AppCompatActivity {
 
 
         setUpUserProfileButton();
-        createTaskInstances();
+//        createTaskInstances();
+        updateTaskListFromDatabase();
         setupTaskRecyclerView();
-
         setUpAddTaskFormButton();
         setUpAllTasksButton();
 
@@ -149,18 +153,30 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-    void createTaskInstances(){
-//        Step 2-2 cont.: Fill list w/ data
-        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", new java.util.Date(), TaskStateEnum.NEW));
-        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", new java.util.Date(), TaskStateEnum.ASSIGNED));
-        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", new java.util.Date(), TaskStateEnum.COMPLETE));
-
-    }
+//    void createTaskInstances(){
+////        Step 2-2 cont.: Fill list w/ data
+//        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", new java.util.Date(), TaskStateEnum.NEW));
+//        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", new java.util.Date(), TaskStateEnum.ASSIGNED));
+//        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", new java.util.Date(), TaskStateEnum.COMPLETE));
+//
+//    }
 
     void updateTaskListFromDatabase(){
 //        tasks.clear();
 //        TODO: Make a dynamoDB call
-//        tasks.addAll(taskmasterDatabase.taskDao().findAll());
-        adapter.notifyDataSetChanged();
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                success -> {
+                    Log.i(TAG, "Read tasks successfully!");
+                    tasks.clear();
+                    for(Task databaseTask : success.getData()) {
+                        tasks.add(databaseTask);
+                    }
+                    runOnUiThread(() -> {
+                        adapter.notifyDataSetChanged();
+                    });
+                },
+                failure -> Log.i(TAG, "Failed to read tasks")
+        );
     }
 }
