@@ -8,12 +8,10 @@ import android.widget.TextView;
 
 import com.rocio.taskmaster.MainActivity;
 import com.rocio.taskmaster.R;
-import com.rocio.taskmaster.database.TaskMasterDatabase;
-import com.rocio.taskmaster.models.Task;
 
 public class TaskDetailsActivity extends AppCompatActivity {
 
-    TaskMasterDatabase taskMasterDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

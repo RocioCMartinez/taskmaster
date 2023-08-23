@@ -1,15 +1,12 @@
 package com.rocio.taskmaster.models;
 
-import androidx.room.Entity;
-import androidx.room.Ignore;
-import androidx.room.PrimaryKey;
+
 
 import java.util.Date;
-@Entity
+
 // Step 2-1: Create a data class
 public class Task {
-    @PrimaryKey(autoGenerate = true)
-            public Long id;
+
     String title;
 
     String body;
@@ -18,9 +15,10 @@ public class Task {
 
     TaskStateEnum taskState;
 
-    @Ignore
+
     public Task() {
     }
+
 
     public Task(String title, String body, java.util.Date dateCreated, TaskStateEnum taskState) {
         this.title = title;
@@ -61,11 +59,7 @@ public class Task {
         this.taskState = taskState;
     }
 
-    public Long getId() {
-        return id;
-    }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+
+
 }

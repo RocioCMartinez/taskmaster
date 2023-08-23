@@ -1,40 +1,28 @@
 package com.rocio.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
-
 import android.os.Bundle;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
 import com.rocio.taskmaster.MainActivity;
 import com.rocio.taskmaster.R;
-import com.rocio.taskmaster.database.TaskMasterDatabase;
 import com.rocio.taskmaster.models.Task;
 import com.rocio.taskmaster.models.TaskStateEnum;
 
 import java.util.Date;
 
 public class AddTaskActivity extends AppCompatActivity {
-    TaskMasterDatabase taskMasterDatabase;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        taskMasterDatabase = Room.databaseBuilder(
-                getApplicationContext(),
-                TaskMasterDatabase.class,
-                MainActivity.DATABASE_NAME)
-                .allowMainThreadQueries() // for dev purposes
-                .build();
 
         Spinner taskStateSpinner = (Spinner) findViewById(R.id.AddTaskActivityTaskStateSpinner);
 
@@ -66,7 +54,8 @@ public class AddTaskActivity extends AppCompatActivity {
                     new Date(),
                     TaskStateEnum.fromString(taskStateSpinner.getSelectedItem().toString())
             );
-            taskMasterDatabase.taskDao().insertATask(taskToSave);
+//            TODO: Make a DynamoDB/GraphQL call
+//            taskMasterDatabase.taskDao().insertATask(taskToSave);
             Toast.makeText(AddTaskActivity.this, "Task Added!", Toast.LENGTH_SHORT).show();
         });
     }
