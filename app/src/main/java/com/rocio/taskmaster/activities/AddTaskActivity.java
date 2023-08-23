@@ -1,49 +1,50 @@
 package com.rocio.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
-import androidx.room.Room;
-
-
 import android.os.Bundle;
+import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
-import android.widget.TextView;
 import android.widget.Toast;
 
 
-import com.rocio.taskmaster.MainActivity;
+import com.amplifyframework.api.graphql.model.ModelMutation;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.core.model.Model;
+import com.amplifyframework.core.model.temporal.Temporal;
+import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.TaskStateEnum;
 import com.rocio.taskmaster.R;
-import com.rocio.taskmaster.database.TaskMasterDatabase;
-import com.rocio.taskmaster.models.Task;
-import com.rocio.taskmaster.models.TaskStateEnum;
+
 
 import java.util.Date;
 
 public class AddTaskActivity extends AppCompatActivity {
-    TaskMasterDatabase taskMasterDatabase;
+    private final String TAG = "AddTaskActivity";
+
+    Button saveButton;
+    EditText taskTitleEditText;
+    EditText taskBodyEditText;
+    Spinner taskStateSpinner;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
-        taskMasterDatabase = Room.databaseBuilder(
-                getApplicationContext(),
-                TaskMasterDatabase.class,
-                MainActivity.DATABASE_NAME)
-                .allowMainThreadQueries() // for dev purposes
-                .build();
+        saveButton = findViewById(R.id.AddTaskActivityButton);
+        taskStateSpinner = findViewById(R.id.AddTaskActivityTaskStateSpinner);
+        taskTitleEditText = findViewById(R.id.AddTaskActivityTaskTitle);
+        taskBodyEditText = findViewById(R.id.AddTaskActivityDescription);
 
-        Spinner taskStateSpinner = (Spinner) findViewById(R.id.AddTaskActivityTaskStateSpinner);
-
-        setUpTaskStateSpinner(taskStateSpinner);
-        setUpAddTaskActivityButton(taskStateSpinner);
+        setUpTaskStateSpinner();
+        setUpAddTaskButton();
     }
 
 
-    void setUpTaskStateSpinner(Spinner taskStateSpinner) {
+    void setUpTaskStateSpinner() {
         taskStateSpinner.setAdapter(new ArrayAdapter<>(
                 this,
                 android.R.layout.simple_spinner_item,
@@ -51,23 +52,24 @@ public class AddTaskActivity extends AppCompatActivity {
         ));
     }
 
-    void setUpAddTaskActivityButton(Spinner taskStateSpinner){
-        // 4 steps to event listener set up
-        //1: Get UI element by ID
-        Button addTaskActivityButton = findViewById(R.id.AddTaskActivityButton);
-        //2/3: Add an onClickListener
-        addTaskActivityButton.setOnClickListener(view -> {
-            //4: Define the callback method
-//            ((TextView)findViewById(R.id.AddTaskActivityMessage)).setText("Submitted!");
+    void setUpAddTaskButton(){
 
-            Task taskToSave = new Task(
-                    ((EditText)findViewById(R.id.AddTaskActivityTaskTitle)).getText().toString(),
-                    ((EditText) findViewById(R.id.AddTaskActivityDescription)).getText().toString(),
-                    new Date(),
-                    TaskStateEnum.fromString(taskStateSpinner.getSelectedItem().toString())
+        saveButton.setOnClickListener(view -> {
+
+//            TODO: Make a DynamoDB/GraphQL call
+            Task taskToSave = Task.builder()
+                    .title(taskTitleEditText.getText().toString())
+                    .body(taskBodyEditText.getText().toString())
+                            .dateCreated(new Temporal.DateTime(new Date(), 0))
+                                    .taskState((TaskStateEnum) taskStateSpinner.getSelectedItem())
+                                            .build();
+
+            Amplify.API.mutate(
+                    ModelMutation.create(taskToSave),
+                    successResponse -> Log.i(TAG, "AddTaskActivity.setUpAddTaskButton(): created task successfully"),
+                    failureResponse -> Log.i(TAG, "AddTaskActivity.setUpAddTaskButton(): failure response " + failureResponse)
             );
-            taskMasterDatabase.taskDao().insertATask(taskToSave);
-            Toast.makeText(AddTaskActivity.this, "Task Added!", Toast.LENGTH_SHORT).show();
+            Toast.makeText(AddTaskActivity.this, "Task saved!", Toast.LENGTH_SHORT).show();
         });
     }
 }

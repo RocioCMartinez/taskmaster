@@ -12,25 +12,27 @@ import android.content.SharedPreferences;
 import android.graphics.Rect;
 import android.os.Bundle;
 import androidx.preference.PreferenceManager;
-import androidx.room.Room;
 
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.core.Amplify;
+import com.amplifyframework.datastore.generated.model.Task;
 import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.AllTasksActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
 import com.rocio.taskmaster.adapters.TaskListRecyclerViewAdapter;
-import com.rocio.taskmaster.database.TaskMasterDatabase;
-import com.rocio.taskmaster.models.TaskStateEnum;
-import com.rocio.taskmaster.models.Task;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
+    public static final String TAG = "MainActivity";
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
 //    public static final Long TASK_ID_EXTRA_TAG = Task.getId(); // new line***
     public static final String TASK_DESCRIPTION_TAG = "taskDescription";
@@ -40,8 +42,8 @@ public class MainActivity extends AppCompatActivity {
     List<Task> tasks = new ArrayList<>();
 
 
-    TaskMasterDatabase taskmasterDatabase;
-    public static final String DATABASE_NAME = "rocio_taskmaster";
+
+
     TaskListRecyclerViewAdapter adapter;
 
 
@@ -52,15 +54,11 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-        setUpDatabase();
-        setUpUserProfileButton();
-//        setUpTaskOneButton();
-//        setupTaskTwoButton();
-//        setupTaskThreeButton();
-//   Instances must be created before RecyclerView
-//        createTaskInstances();
-        setupTaskRecyclerView();
 
+        setUpUserProfileButton();
+//        createTaskInstances();
+        updateTaskListFromDatabase();
+        setupTaskRecyclerView();
         setUpAddTaskFormButton();
         setUpAllTasksButton();
 
@@ -74,17 +72,7 @@ public class MainActivity extends AppCompatActivity {
         updateTaskListFromDatabase();
     }
 
-    void setUpDatabase(){
-        taskmasterDatabase = Room.databaseBuilder(
-                getApplicationContext(),
-                TaskMasterDatabase.class,
-                DATABASE_NAME)
-                .fallbackToDestructiveMigration() //turn off in production
-                .allowMainThreadQueries()
-                .build();
 
-        tasks = taskmasterDatabase.taskDao().findAll(); //to test db works, not returning value
-    }
 
     void setUpUserProfileButton(){
         ((ImageView)findViewById(R.id.MainActivityUserProfileButton)).setOnClickListener(view -> {
@@ -98,32 +86,7 @@ public class MainActivity extends AppCompatActivity {
         ((TextView)findViewById(R.id.MainActivityUserName)).setText(userName + "'s Tasks");
     }
 
-//    void setUpTaskOneButton() {
-//        ((Button)findViewById(R.id.MainActivityTaskOneBtn)).setOnClickListener(view -> {
-//            String taskName = ((Button)findViewById(R.id.MainActivityTaskOneBtn)).getText().toString();
-//            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
-//            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
-//            startActivity(goToTaskDetails);
-//        });
-//    }
 
-//    void setupTaskTwoButton() {
-//        ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).setOnClickListener(view -> {
-//            String taskName = ((Button)findViewById(R.id.MainActivityTaskTwoBtn)).getText().toString();
-//            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
-//            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
-//            startActivity(goToTaskDetails);
-//        });
-//    }
-
-//    void setupTaskThreeButton() {
-//        ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).setOnClickListener(view -> {
-//            String taskName = ((Button)findViewById(R.id.MainActivityTaskThreeBtn)).getText().toString();
-//            Intent goToTaskDetails = new Intent(MainActivity.this, TaskDetailsActivity.class);
-//            goToTaskDetails.putExtra(TASK_NAME_EXTRA_TAG, taskName);
-//            startActivity(goToTaskDetails);
-//        });
-//    }
 
     void setupTaskRecyclerView(){
 //        Step 1-2: Grab the recyclerview
@@ -192,15 +155,28 @@ public class MainActivity extends AppCompatActivity {
 
 //    void createTaskInstances(){
 ////        Step 2-2 cont.: Fill list w/ data
-//        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", TaskStateEnum.NEW));
-//        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", TaskStateEnum.ASSIGNED));
-//        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", TaskStateEnum.COMPLETE));
+//        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", new java.util.Date(), TaskStateEnum.NEW));
+//        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", new java.util.Date(), TaskStateEnum.ASSIGNED));
+//        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", new java.util.Date(), TaskStateEnum.COMPLETE));
 //
 //    }
 
     void updateTaskListFromDatabase(){
-        tasks.clear();
-        tasks.addAll(taskmasterDatabase.taskDao().findAll());
-        adapter.notifyDataSetChanged();
+//        tasks.clear();
+//        TODO: Make a dynamoDB call
+        Amplify.API.query(
+                ModelQuery.list(Task.class),
+                success -> {
+                    Log.i(TAG, "Read tasks successfully!");
+                    tasks.clear();
+                    for(Task databaseTask : success.getData()) {
+                        tasks.add(databaseTask);
+                    }
+                    runOnUiThread(() -> {
+                        adapter.notifyDataSetChanged();
+                    });
+                },
+                failure -> Log.i(TAG, "Failed to read tasks")
+        );
     }
 }

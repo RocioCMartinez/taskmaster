@@ -26,6 +26,11 @@ Day4:
 ![Task Details](src/main/images/Day4taskdetails.png)
 ![Add Task](src/main/images/Day4AddTaskpg.png)
 
+Day5:
+Updated data base to use of AWS/DynamoDB
+![Home Page](src/main/images/Day5HomePage.png)
+
 ### Resources
+- Rey Oliva
 - Alex Chao
 - ChatGPT (troubleshooting errors)
