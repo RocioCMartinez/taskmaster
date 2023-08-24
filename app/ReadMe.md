@@ -30,6 +30,12 @@ Day5:
 Updated data base to use of AWS/DynamoDB
 ![Home Page](src/main/images/Day5HomePage.png)
 
+Day6::
+![Home Page](src/main/images/Day6homepg.png)
+![Add Task](src/main/images/Day6AddTaskpage.png)
+DynamoDB task table showing teamId
+![Task Table](src/main/images/AWSTaskTable.png)
+
 ### Resources
 - Rey Oliva
 - Alex Chao

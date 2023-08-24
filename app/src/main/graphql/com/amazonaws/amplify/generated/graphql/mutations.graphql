@@ -10,6 +10,18 @@ mutation CreateTask(
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -26,6 +38,18 @@ mutation UpdateTask(
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -42,6 +66,102 @@ mutation DeleteTask(
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation CreateTeam(
+  $input: CreateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  createTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation UpdateTeam(
+  $input: UpdateTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  updateTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+mutation DeleteTeam(
+  $input: DeleteTeamInput!
+  $condition: ModelTeamConditionInput
+) {
+  deleteTeam(input: $input, condition: $condition) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename

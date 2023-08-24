@@ -36,10 +36,10 @@
         android:layout_marginTop="8dp"
         android:ems="10"
         android:hint="@string/addtask_tasktitle"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:minHeight="48dp"
-        android:textColorHint="#00BCD4"
-        android:imeOptions="actionDone"
+        android:textColorHint="#00796B"
         app:layout_constraintStart_toStartOf="@+id/AddTaskTitle"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskTitle" />
 
@@ -61,10 +61,10 @@
         android:layout_marginTop="64dp"
         android:ems="10"
         android:hint="@string/addtask_descriptioninput"
+        android:imeOptions="actionDone"
         android:inputType="text"
         android:minHeight="48dp"
-        android:textColorHint="#00BCD4"
-        android:imeOptions="actionDone"
+        android:textColorHint="#00796B"
         app:layout_constraintStart_toStartOf="@+id/AddTaskDescription"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityTaskTitle" />
 
@@ -73,20 +73,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="52dp"
-        android:layout_marginBottom="120dp"
+        android:layout_marginBottom="72dp"
         android:text="@string/saveusername_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
-
-    <TextView
-        android:id="@+id/AddTaskActivityMessage"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginBottom="168dp"
-        android:text="@string/addtask_message"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
 
     <Spinner
         android:id="@+id/AddTaskActivityTaskStateSpinner"
@@ -98,4 +88,16 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityDescription" />
+
+    <Spinner
+        android:id="@+id/AddTaskTeamSpinner"
+        android:layout_width="0dp"
+        android:layout_height="48dp"
+        android:layout_marginStart="52dp"
+        android:layout_marginTop="40dp"
+        android:layout_marginEnd="52dp"
+        android:contentDescription="@string/task_team_select"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityTaskStateSpinner" />
 </androidx.constraintlayout.widget.ConstraintLayout>

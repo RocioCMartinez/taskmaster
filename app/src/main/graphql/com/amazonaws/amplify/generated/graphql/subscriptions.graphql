@@ -7,6 +7,18 @@ subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -20,6 +32,18 @@ subscription OnUpdateTask($filter: ModelSubscriptionTaskFilterInput) {
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
     createdAt
     updatedAt
     __typename
@@ -33,6 +57,93 @@ subscription OnDeleteTask($filter: ModelSubscriptionTaskFilterInput) {
     body
     dateCreated
     taskState
+    teamId
+    teamP {
+      id
+      teamName
+      tasks {
+        nextToken
+        __typename
+      }
+      createdAt
+      updatedAt
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
+  onCreateTeam(filter: $filter) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnUpdateTeam($filter: ModelSubscriptionTeamFilterInput) {
+  onUpdateTeam(filter: $filter) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
+    createdAt
+    updatedAt
+    __typename
+  }
+}
+
+subscription OnDeleteTeam($filter: ModelSubscriptionTeamFilterInput) {
+  onDeleteTeam(filter: $filter) {
+    id
+    teamName
+    tasks {
+      items {
+        id
+        title
+        body
+        dateCreated
+        taskState
+        teamId
+        createdAt
+        updatedAt
+        __typename
+      }
+      nextToken
+      __typename
+    }
     createdAt
     updatedAt
     __typename
