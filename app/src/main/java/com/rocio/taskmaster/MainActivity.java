@@ -19,9 +19,11 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
+import com.amplifyframework.datastore.generated.model.Team;
 import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.AllTasksActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
@@ -54,7 +56,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
+//        createTeamInstances();
         setUpUserProfileButton();
 //        createTaskInstances();
         updateTaskListFromDatabase();
@@ -170,6 +172,7 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Read tasks successfully!");
                     tasks.clear();
                     for(Task databaseTask : success.getData()) {
+
                         tasks.add(databaseTask);
                     }
                     runOnUiThread(() -> {
@@ -177,6 +180,35 @@ public class MainActivity extends AppCompatActivity {
                     });
                 },
                 failure -> Log.i(TAG, "Failed to read tasks")
+        );
+    }
+
+    void createTeamInstances(){
+        Team team1 = Team.builder()
+                .teamName("Team One")
+                .build();
+        Amplify.API.mutate(
+                ModelMutation.create(team1),
+                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
+                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
+        );
+
+        Team team2 = Team.builder()
+                .teamName("Team Two")
+                .build();
+        Amplify.API.mutate(
+                ModelMutation.create(team2),
+                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
+                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
+        );
+
+        Team team3 = Team.builder()
+                .teamName("Team Three")
+                .build();
+        Amplify.API.mutate(
+                ModelMutation.create(team3),
+                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
+                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
         );
     }
 }

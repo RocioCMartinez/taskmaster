@@ -10,6 +10,8 @@ title: String!
 body: String
 dateCreated: AWSDateTime
 taskState: TaskStateEnum
+teamId: ID! @index(name: "byTeam", sortKeyFields: ["title"])
+teamP: Team @belongsTo(fields: ["teamId"])
 }
 
 enum TaskStateEnum {
@@ -17,4 +19,10 @@ NEW
 ASSIGNED
 IN_PROGRESS
 COMPLETE
+}
+
+type Team @model @auth(rules: [{allow: public}]) {
+id: ID!
+teamName: String!
+tasks: [Task] @hasMany(indexName: "byTeam", fields: ["id"])
 }
