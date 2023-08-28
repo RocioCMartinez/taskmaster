@@ -4,7 +4,6 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
-import android.preference.PreferenceManager;
 
 import android.util.Log;
 import android.widget.ArrayAdapter;
@@ -16,7 +15,6 @@ import android.widget.Toast;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Team;
-import com.google.android.material.snackbar.Snackbar;
 import com.rocio.taskmaster.R;
 
 import java.util.ArrayList;
@@ -25,10 +23,10 @@ import java.util.concurrent.CompletableFuture;
 
 public class UserProfileActivity extends AppCompatActivity {
     public static final String TAG = "UserProfileActivity";
-    public static final String USERNAME_TAG = "userName";// At top to be accessed elsewhere
+    public static final String USERNAME_TAG = "userName";
 
     public static final String TEAM_TAG = "teamSelected";
-    SharedPreferences preferences; //Place near top of class
+    SharedPreferences preferences;
     CompletableFuture<List<Team>> teamsFuture = null;
 
     Spinner taskTeamSpinner;
@@ -40,7 +38,6 @@ public class UserProfileActivity extends AppCompatActivity {
         taskTeamSpinner = findViewById(R.id.UserProfileActivityTeamSpinner);
         teamsFuture = new CompletableFuture<>();
 
-//        preferences = PreferenceManager.getDefaultSharedPreferences(this);
         preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
 
         setupUserNameEditText();
@@ -105,8 +102,7 @@ public class UserProfileActivity extends AppCompatActivity {
             preferencesEditor.putString(USERNAME_TAG, userNameString);
             preferencesEditor.putString(TEAM_TAG, teamSelected);
             preferencesEditor.apply();// Nothing will save without this line
-                //Can use either option to confirm save
-//            Snackbar.make(findViewById(R.id.userProfileActivityView), "Username saved!", Snackbar.LENGTH_SHORT).show();
+
             Toast.makeText(UserProfileActivity.this, "Username/Team saved!", Toast.LENGTH_SHORT).show();
         });
     }

@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Rect;
@@ -20,11 +21,10 @@ import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.amplifyframework.api.graphql.model.ModelMutation;
+
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
-import com.amplifyframework.datastore.generated.model.Team;
 import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.AllTasksActivity;
 import com.rocio.taskmaster.activities.UserProfileActivity;
@@ -37,11 +37,10 @@ import java.util.List;
 public class MainActivity extends AppCompatActivity {
     public static final String TAG = "MainActivity";
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
-//    public static final Long TASK_ID_EXTRA_TAG = Task.getId(); // new line***
     public static final String TASK_DESCRIPTION_TAG = "taskDescription";
     SharedPreferences preferences;
 
-//    Step 2-2: Make some data items
+
     List<Task> tasks = new ArrayList<>();
 
 
@@ -57,9 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-//        createTeamInstances();
+
         setUpUserProfileButton();
-//        createTaskInstances();
         updateTaskListFromDatabase();
         setupTaskRecyclerView();
         setUpAddTaskFormButton();
@@ -84,6 +82,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    @SuppressLint("SetTextI18n")
     void setupUsernameTextView(){
         String userName = preferences.getString(USERNAME_TAG, "No username");
         ((TextView)findViewById(R.id.MainActivityUserName)).setText(userName + "'s Tasks");
@@ -92,34 +91,25 @@ public class MainActivity extends AppCompatActivity {
 
 
     void setupTaskRecyclerView(){
-//        Step 1-2: Grab the recyclerview
+
         RecyclerView taskListRecyclerView = (RecyclerView) findViewById(R.id.MainActivityTaskRecyclerView);
 
-//        Step 1-3: set the layout manager for RecyclerView to a LinearLayoutManager
+
         RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-//        for horizontal line
-//        ((LinearLayoutManager)layoutManager).setOrientation(LinearLayoutManager.HORIZONTAL);
+
         taskListRecyclerView.setLayoutManager(layoutManager);
 
-//        Extra: RecyclerView Styling- Add item decoration w/ spacing
+
         int spaceInPixels = getResources().getDimensionPixelSize(R.dimen.task_fragment_spacing);
         taskListRecyclerView.addItemDecoration(new RecyclerView.ItemDecoration() {
             @Override
             public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
                 super.getItemOffsets(outRect, view, parent, state);
                 outRect.bottom = spaceInPixels;
-//                Do following code if issue displaying last fragment
-//                if(parent.getChildAdapterPosition(view) == tasks.size()-1){
-//                    outRect.bottom = 0;
-//                }
             }
         });
 
-//        Step1-5: Create and attach RecyclerView.Adapter to RecyclerView
-//        TaskListRecyclerViewAdapter adapter = new TaskListRecyclerViewAdapter();
-//        Step 2-3: Hand data items from Main Activity to our RecyclerViewAdapter
-//        TaskListRecyclerViewAdapter adapter = new TaskListRecyclerViewAdapter(tasks);
-//        Step 3-2: Hand in the Activity context to the adapter
+
         adapter = new TaskListRecyclerViewAdapter(tasks, this);
         taskListRecyclerView.setAdapter(adapter);
 
@@ -156,13 +146,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
-//    void createTaskInstances(){
-////        Step 2-2 cont.: Fill list w/ data
-//        tasks.add(new Task("Meal Prep", "Cook and store containers of meals for the week", new java.util.Date(), TaskStateEnum.NEW));
-//        tasks.add(new Task("Laundry", "Wash, dry, fold, and store all the clothes in the hamper.", new java.util.Date(), TaskStateEnum.ASSIGNED));
-//        tasks.add(new Task("Replace bedding/towels", "Weekly replace bedding and towels, ensuring old ones are washed and put away.", new java.util.Date(), TaskStateEnum.COMPLETE));
-//
-//    }
+
 
     void updateTaskListFromDatabase(){
         String teamName = preferences.getString(TEAM_TAG, null);
@@ -180,40 +164,10 @@ public class MainActivity extends AppCompatActivity {
                                 tasks.add(databaseTask);
                             }
                     }
-                    runOnUiThread(() -> {
-                        adapter.notifyDataSetChanged();
-                    });
+                    runOnUiThread(() -> adapter.notifyDataSetChanged());
                 },
                 failure -> Log.i(TAG, "Failed to read tasks")
         );
     }
 
-    void createTeamInstances(){
-        Team team1 = Team.builder()
-                .teamName("Team One")
-                .build();
-        Amplify.API.mutate(
-                ModelMutation.create(team1),
-                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
-                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
-        );
-
-        Team team2 = Team.builder()
-                .teamName("Team Two")
-                .build();
-        Amplify.API.mutate(
-                ModelMutation.create(team2),
-                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
-                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
-        );
-
-        Team team3 = Team.builder()
-                .teamName("Team Three")
-                .build();
-        Amplify.API.mutate(
-                ModelMutation.create(team3),
-                successResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): created team successfully"),
-                failureResponse -> Log.i(TAG, "MainActivity.createTeamInstances(): team failure response: " + failureResponse)
-        );
-    }
 }
