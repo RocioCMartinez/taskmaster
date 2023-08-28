@@ -69,8 +69,6 @@ public class AddTaskActivity extends AppCompatActivity {
     void setUpAddTaskButton(){
 
         saveButton.setOnClickListener(view -> {
-            String selectedTeamString = taskTeamSpinner.getSelectedItem().toString();
-
             List<Team> teams = null;
             try {
                 teams = teamsFuture.get();
@@ -80,7 +78,11 @@ public class AddTaskActivity extends AppCompatActivity {
             } catch (ExecutionException ee) {
                 Log.e(TAG, "ExecutionException while getting teams");
             }
-            assert teams != null;
+            Object selectedTeamObject = taskTeamSpinner.getSelectedItem();
+            if (selectedTeamObject != null) {
+                String selectedTeamString = selectedTeamObject.toString();
+
+                assert teams != null;
             Team selectedTeam = teams.stream().filter(t -> t.getTeamName().equals(selectedTeamString)).findAny().orElseThrow(RuntimeException::new);
 
 //            TODO: Make a DynamoDB/GraphQL call
@@ -97,6 +99,10 @@ public class AddTaskActivity extends AppCompatActivity {
                     successResponse -> Log.i(TAG, "AddTaskActivity.setUpAddTaskButton(): created task successfully"),
                     failureResponse -> Log.i(TAG, "AddTaskActivity.setUpAddTaskButton(): failure response " + failureResponse)
             );
+            } else {
+                Log.e(TAG, "No team selected in the spinner");
+                // Handle the case where no team is selected
+            }
             Toast.makeText(AddTaskActivity.this, "Task saved!", Toast.LENGTH_SHORT).show();
         });
     }
