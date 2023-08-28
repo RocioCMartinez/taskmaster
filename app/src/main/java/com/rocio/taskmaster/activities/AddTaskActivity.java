@@ -13,7 +13,6 @@ import android.widget.Toast;
 import com.amplifyframework.api.graphql.model.ModelMutation;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
-import com.amplifyframework.core.model.Model;
 import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.TaskStateEnum;
@@ -115,13 +114,11 @@ public class AddTaskActivity extends AppCompatActivity {
                     }
                     teamsFuture.complete(teams);
 
-                    runOnUiThread(() -> {
-                        taskTeamSpinner.setAdapter(new ArrayAdapter<>(
-                                this,
-                                android.R.layout.simple_spinner_item,
-                                teamNames
-                        ));
-                    });
+                    runOnUiThread(() -> taskTeamSpinner.setAdapter(new ArrayAdapter<>(
+                            this,
+                            android.R.layout.simple_spinner_item,
+                            teamNames
+                    )));
                 },
                 failure -> {
                     teamsFuture.complete(null);
