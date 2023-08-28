@@ -1,5 +1,6 @@
 package com.rocio.taskmaster;
 
+import static com.rocio.taskmaster.activities.UserProfileActivity.TEAM_TAG;
 import static com.rocio.taskmaster.activities.UserProfileActivity.USERNAME_TAG;
 
 import androidx.annotation.NonNull;
@@ -164,6 +165,7 @@ public class MainActivity extends AppCompatActivity {
 //    }
 
     void updateTaskListFromDatabase(){
+        String teamName = preferences.getString(TEAM_TAG, null);
 //        tasks.clear();
 //        TODO: Make a dynamoDB call
         Amplify.API.query(
@@ -172,8 +174,11 @@ public class MainActivity extends AppCompatActivity {
                     Log.i(TAG, "Read tasks successfully!");
                     tasks.clear();
                     for(Task databaseTask : success.getData()) {
+                        // Only view tasks by team
 
-                        tasks.add(databaseTask);
+                            if(databaseTask.getTeamP() != null && databaseTask.getTeamP().getTeamName().equals(teamName)) {
+                                tasks.add(databaseTask);
+                            }
                     }
                     runOnUiThread(() -> {
                         adapter.notifyDataSetChanged();
