@@ -16,6 +16,9 @@
         android:theme="@style/Theme.Taskmaster"
         tools:targetApi="31">
         <activity
+            android:name=".activities.LoginActivity"
+            android:exported="false" />
+        <activity
             android:name=".activities.VerifyActivity"
             android:exported="false" />
         <activity

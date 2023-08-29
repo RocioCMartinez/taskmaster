@@ -59,24 +59,8 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
 
-//      Cognito Verification Logic
-//        Amplify.Auth.confirmSignUp("rym5411@gmail.com",
-//                "961706",
-//                success -> {
-//                    Log.i(TAG, "Verification succeeded: " + success.toString());
-//                },
-//                failure -> {
-//                    Log.i(TAG, "Verification failed: " + failure.toString());
-//                });
-//        Cognito LogIn Logic
-//        Amplify.Auth.signIn("rym5411@gmail.com",
-//                "P@ssword123",
-//                success -> {
-//                    Log.i(TAG, "Login succeeded: " + success.toString());
-//                },
-//                failure -> {
-//                    Log.i(TAG, "Login failed: " + failure.toString());
-//                });
+
+
 //        Cognito LogOut Logic
         AuthSignOutOptions signOutOptions = AuthSignOutOptions.builder()
                         .globalSignOut(true)

@@ -2,6 +2,7 @@ package com.rocio.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
 
@@ -31,6 +32,8 @@ public class UserProfileActivity extends AppCompatActivity {
 
     Spinner taskTeamSpinner;
 
+    Button signUpButton;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -40,9 +43,12 @@ public class UserProfileActivity extends AppCompatActivity {
 
         preferences = androidx.preference.PreferenceManager.getDefaultSharedPreferences(this);
 
+        signUpButton = findViewById(R.id.UserProfileActivitySignUpButton);
+
         setupUserNameEditText();
         setUpTeamSpinner();
         setupSaveButton();
+        setUpSignUpButton();
     }
 
     void setupUserNameEditText(){
@@ -107,6 +113,11 @@ public class UserProfileActivity extends AppCompatActivity {
         });
     }
 
-
+    void setUpSignUpButton() {
+        signUpButton.setOnClickListener(view -> {
+            Intent goToSignUpActivityIntent = new Intent(UserProfileActivity.this, SignUpActivity.class);
+            startActivity(goToSignUpActivityIntent);
+        });
+    }
 
 }

@@ -4,57 +4,58 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".activities.VerifyActivity">
+    tools:context=".activities.LoginActivity">
 
     <TextView
-        android:id="@+id/VerifyActivityTitleTextView"
+        android:id="@+id/LoginActivityTitleTextView"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="40dp"
-        android:text="@string/verify_account"
+        android:text="@string/login_title"
         android:textColor="@color/black"
         android:textSize="34sp"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <EditText
-        android:id="@+id/VerifyActivityEmailEditText"
+        android:id="@+id/LoginActivityEmailEditText"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_marginTop="56dp"
         android:autofillHints="emailAddress"
         android:ems="10"
         android:hint="@string/editText_email"
-        android:inputType="text|textEmailAddress"
+        android:inputType="textEmailAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/VerifyActivityTitleTextView" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginActivityTitleTextView" />
 
     <EditText
-        android:id="@+id/VerifyActivityVerificationCodeEditText"
+        android:id="@+id/LoginActivityPasswordEditText"
         android:layout_width="wrap_content"
         android:layout_height="56dp"
         android:layout_marginTop="56dp"
-        android:autofillHints="@string/verification_code"
+        android:autofillHints="password"
         android:ems="10"
-        android:hint="@string/verification_code"
-        android:inputType="number"
+        android:hint="@string/signup_password"
+        android:inputType="textPassword"
         android:textColorHint="#8D6E63"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/VerifyActivityEmailEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginActivityEmailEditText" />
 
     <Button
-        android:id="@+id/VerifyActivitySumitButton"
-        android:layout_width="100dp"
+        android:id="@+id/LoginActivitySubmitButton"
+        android:layout_width="wrap_content"
         android:layout_height="56dp"
-        android:layout_marginTop="80dp"
+        android:layout_marginTop="72dp"
         android:text="@string/signupsubmit_button"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/VerifyActivityVerificationCodeEditText" />
+        app:layout_constraintTop_toBottomOf="@+id/LoginActivityPasswordEditText" />
 </androidx.constraintlayout.widget.ConstraintLayout>

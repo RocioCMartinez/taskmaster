@@ -2,6 +2,7 @@ package com.rocio.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.widget.Button;
@@ -28,20 +29,26 @@ public class SignUpActivity extends AppCompatActivity {
         passwordEditText = findViewById(R.id.SignUpActivityPasswordEditText);
         submitButton = findViewById(R.id.SignUpActivitySubmitButton);
 
-//              Cognito Sign Up Logic
-        Amplify.Auth.signUp(emailEditText.getText().toString(),
-                passwordEditText.getText().toString(),
-                AuthSignUpOptions.builder()
-                        .userAttribute(AuthUserAttributeKey.email(), emailEditText.getText().toString())
-                        .build(),
-                successResponse -> Log.i(TAG, "Sign Up Successful: " + successResponse),
-                failureResponse -> Log.i(TAG, "Sign Up Failed. Username: " + emailEditText.getText().toString() + " Error Message: " + failureResponse));
+
 
         setupSubmitButton();
     }
 
     void setupSubmitButton(){
         submitButton.setOnClickListener(v -> {
+            //              Cognito Sign Up Logic
+            Amplify.Auth.signUp(emailEditText.getText().toString(),
+                    passwordEditText.getText().toString(),
+                    AuthSignUpOptions.builder()
+                            .userAttribute(AuthUserAttributeKey.email(), emailEditText.getText().toString())
+                            .build(),
+                    successResponse -> {
+                        Log.i(TAG, "Sign Up Successful: " + successResponse);
+                        Intent goToVerifyActivity = new Intent(SignUpActivity.this, VerifyActivity.class);
+                        goToVerifyActivity.putExtra("email", emailEditText.getText().toString());
+                        startActivity(goToVerifyActivity);
+                    },
+                    failureResponse -> Log.i(TAG, "Sign Up Failed. Username: " + emailEditText.getText().toString() + " Error Message: " + failureResponse));
 
         });
     }
