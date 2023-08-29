@@ -42,7 +42,14 @@ Day7:
 ![Google Play Store](src/main/images/GooglePlayOverview.png)
 ![Pending app launch](src/main/images/lab35googleplay.png)
 
+Day8:
+![Sign Up](src/main/images/SignUpActivity.png)
+![Log In](src/main/images/LoginActivity.png)
+![Verify](src/main/images/VerifyActivity.png)
+![User Profile - logged in](src/main/images/UserProfileActivityLoggedIn.png)
+![User Profile - logged out](src/main/images/UserProfileActivityLoggedOut.png)
+
 ### Resources
 - Rey Oliva
 - Alex Chao
-- ChatGPT (troubleshooting errors)
+- ChatGPT

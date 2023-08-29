@@ -4,7 +4,7 @@ import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.core.model.annotations.BelongsTo;
 import com.amplifyframework.core.model.ModelIdentifier;
 
-import java.util.List;
+
 import java.util.UUID;
 import java.util.Objects;
 
