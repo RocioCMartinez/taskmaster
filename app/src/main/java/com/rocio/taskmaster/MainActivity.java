@@ -23,6 +23,10 @@ import android.widget.TextView;
 
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
+import com.amplifyframework.auth.AuthUserAttributeKey;
+import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
+import com.amplifyframework.auth.options.AuthSignOutOptions;
+import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.rocio.taskmaster.activities.AddTaskActivity;
@@ -53,6 +57,50 @@ public class MainActivity extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+//      Cognito Sign Up Logic
+//        Amplify.Auth.signUp("rym5411@gmail.com",
+//                "P@ssword123",
+//                AuthSignUpOptions.builder()
+//                        .userAttribute(AuthUserAttributeKey.email(), "rym5411@gmail.com")
+//                        .userAttribute(AuthUserAttributeKey.preferredUsername(), "Rocio")
+//                        .build(),
+//                successResponse -> Log.i(TAG, "Sign Up Successful: " + successResponse.toString()),
+//                failureResponse -> Log.i(TAG, "Sign Up Failed. Username: " + "rym5411@gmail.com" + " Error Message: " + failureResponse.toString()));
+//      Cognito Verification Logic
+//        Amplify.Auth.confirmSignUp("rym5411@gmail.com",
+//                "961706",
+//                success -> {
+//                    Log.i(TAG, "Verification succeeded: " + success.toString());
+//                },
+//                failure -> {
+//                    Log.i(TAG, "Verification failed: " + failure.toString());
+//                });
+//        Cognito LogIn Logic
+//        Amplify.Auth.signIn("rym5411@gmail.com",
+//                "P@ssword123",
+//                success -> {
+//                    Log.i(TAG, "Login succeeded: " + success.toString());
+//                },
+//                failure -> {
+//                    Log.i(TAG, "Login failed: " + failure.toString());
+//                });
+//        Cognito LogOut Logic
+        AuthSignOutOptions signOutOptions = AuthSignOutOptions.builder()
+                        .globalSignOut(true)
+                                .build();
+
+        Amplify.Auth.signOut(signOutOptions,
+                signOutResults -> {
+            if(signOutResults instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
+                Log.i(TAG, "Global signout successful");
+            } else if (signOutResults instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
+                Log.i(TAG, "Partial signout successful");
+            } else if (signOutResults instanceof  AWSCognitoAuthSignOutResult.FailedSignOut) {
+                Log.i(TAG, "Logout failed: " + signOutResults.toString());
+            }
+                }
+        );
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
