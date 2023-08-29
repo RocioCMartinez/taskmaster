@@ -58,26 +58,6 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
-
-
-
-//        Cognito LogOut Logic
-        AuthSignOutOptions signOutOptions = AuthSignOutOptions.builder()
-                        .globalSignOut(true)
-                                .build();
-
-        Amplify.Auth.signOut(signOutOptions,
-                signOutResults -> {
-            if(signOutResults instanceof AWSCognitoAuthSignOutResult.CompleteSignOut) {
-                Log.i(TAG, "Global signout successful");
-            } else if (signOutResults instanceof AWSCognitoAuthSignOutResult.PartialSignOut) {
-                Log.i(TAG, "Partial signout successful");
-            } else if (signOutResults instanceof  AWSCognitoAuthSignOutResult.FailedSignOut) {
-                Log.i(TAG, "Logout failed: " + signOutResults.toString());
-            }
-                }
-        );
-
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
 
