@@ -22,4 +22,8 @@
     <string name="blank_task_name">No task name provided</string>
     <string name="no_task_description">No description provided</string>
     <string name="task_team_select">Select Task Team</string>
+    <string name="signup_title">Sign Up!</string>
+    <string name="editText_email">Email</string>
+    <string name="signup_password">Password</string>
+    <string name="signupsubmit_button">SUBMIT</string>
 </resources>
