@@ -49,6 +49,12 @@ Day8:
 ![User Profile - logged in](src/main/images/UserProfileActivityLoggedIn.png)
 ![User Profile - logged out](src/main/images/UserProfileActivityLoggedOut.png)
 
+Day9:
+![Add Task Page](src/main/images/Day9AddTaskActivity.png)
+![Task Details Page](src/main/images/Day9TaskDetailsActivity.png)
+![S3 Data Storage](src/main/images/S3FileStorage.png)
+![Dynamo Task w/ S3 key](src/main/images/S3Data.png)
+
 ### Resources
 - Rey Oliva
 - Alex Chao
