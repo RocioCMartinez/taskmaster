@@ -12,6 +12,7 @@ dateCreated: AWSDateTime
 taskState: TaskStateEnum
 teamId: ID! @index(name: "byTeam", sortKeyFields: ["title"])
 teamP: Team @belongsTo(fields: ["teamId"])
+taskImageS3Key: String
 }
 
 enum TaskStateEnum {

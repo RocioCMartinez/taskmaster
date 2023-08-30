@@ -23,10 +23,6 @@ import android.widget.TextView;
 
 
 import com.amplifyframework.api.graphql.model.ModelQuery;
-import com.amplifyframework.auth.AuthUserAttributeKey;
-import com.amplifyframework.auth.cognito.result.AWSCognitoAuthSignOutResult;
-import com.amplifyframework.auth.options.AuthSignOutOptions;
-import com.amplifyframework.auth.options.AuthSignUpOptions;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.rocio.taskmaster.activities.AddTaskActivity;
@@ -35,13 +31,19 @@ import com.rocio.taskmaster.activities.UserProfileActivity;
 import com.rocio.taskmaster.adapters.TaskListRecyclerViewAdapter;
 
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
-    public static final String TAG = "MainActivity";
+    private static final String TAG = "MainActivity";
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
     public static final String TASK_DESCRIPTION_TAG = "taskDescription";
+
+    public static final String TASK_ID_EXTRA_TAG = "taskId";
     SharedPreferences preferences;
 
 
@@ -60,12 +62,13 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
-
+//        manualS3FileUpload();
         setUpUserProfileButton();
         updateTaskListFromDatabase();
         setupTaskRecyclerView();
         setUpAddTaskFormButton();
         setUpAllTasksButton();
+
 
     }
 
@@ -173,5 +176,35 @@ public class MainActivity extends AppCompatActivity {
                 failure -> Log.i(TAG, "Failed to read tasks")
         );
     }
+
+    void manualS3FileUpload(){
+        // The test file will be saved to S3
+        String testFilename = "testFilename";
+        File testFile = new File(getApplicationContext().getFilesDir(), testFilename);
+        //Writing in test file with BufferedWriter
+        try {
+            BufferedWriter testFileBufferedWriter = new BufferedWriter(new FileWriter(testFile));
+            testFileBufferedWriter.append("Test text here\nFor testing purposes");
+            testFileBufferedWriter.close(); // Makes sure you do this or your text may not be saved
+        } catch(IOException ioe) {
+            Log.e(TAG, "Could not write file locally to filename: " + testFilename);
+        }
+
+        // create an S3 key
+        String testFileS3Key = "testFileOnS3.txt";
+
+        // call Storage.uploadFile
+        Amplify.Storage.uploadFile(
+                testFileS3Key,
+                testFile,
+                success -> {
+                    Log.i(TAG, "S3 uploaded successfully! Key: " + success.getKey());
+                },
+                failure -> {
+                    Log.i(TAG, "S3 upload failed: " + failure.getMessage());
+                }
+        );
+    }
+
 
 }

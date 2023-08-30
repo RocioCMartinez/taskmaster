@@ -12,7 +12,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="72dp"
+        android:layout_marginTop="48dp"
         android:text="@string/addtask_label"
         android:textSize="34sp"
         app:layout_constraintStart_toStartOf="parent"
@@ -23,19 +23,19 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="52dp"
-        android:layout_marginTop="88dp"
+        android:layout_marginTop="24dp"
         android:text="@string/addtask_title"
         android:textColor="@color/black"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/AddTaskLabel" />
+        app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityTaskImageView" />
 
     <EditText
         android:id="@+id/AddTaskActivityTaskTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        android:ems="10"
         android:autofillHints="@string/addtask_tasktitle"
+        android:ems="10"
         android:hint="@string/addtask_tasktitle"
         android:imeOptions="actionDone"
         android:inputType="text"
@@ -60,8 +60,8 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="64dp"
-        android:ems="10"
         android:autofillHints="@string/addtask_descriptioninput"
+        android:ems="10"
         android:hint="@string/addtask_descriptioninput"
         android:imeOptions="actionDone"
         android:inputType="text"
@@ -75,7 +75,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="52dp"
-        android:layout_marginBottom="72dp"
+        android:layout_marginBottom="32dp"
         android:text="@string/saveusername_btn"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
@@ -102,4 +102,17 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/AddTaskActivityTaskStateSpinner" />
+
+    <ImageView
+        android:id="@+id/AddTaskActivityTaskImageView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:contentDescription="@string/add_task_image"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/AddTaskLabel"
+        app:srcCompat="@drawable/ic_launcher_background"
+        tools:ignore="ImageContrastCheck" />
 </androidx.constraintlayout.widget.ConstraintLayout>

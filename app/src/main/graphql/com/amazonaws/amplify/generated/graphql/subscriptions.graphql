@@ -19,6 +19,7 @@ subscription OnCreateTask($filter: ModelSubscriptionTaskFilterInput) {
       updatedAt
       __typename
     }
+    taskImageS3Key
     createdAt
     updatedAt
     __typename
@@ -44,6 +45,7 @@ subscription OnUpdateTask($filter: ModelSubscriptionTaskFilterInput) {
       updatedAt
       __typename
     }
+    taskImageS3Key
     createdAt
     updatedAt
     __typename
@@ -69,6 +71,7 @@ subscription OnDeleteTask($filter: ModelSubscriptionTaskFilterInput) {
       updatedAt
       __typename
     }
+    taskImageS3Key
     createdAt
     updatedAt
     __typename
@@ -87,6 +90,7 @@ subscription OnCreateTeam($filter: ModelSubscriptionTeamFilterInput) {
         dateCreated
         taskState
         teamId
+        taskImageS3Key
         createdAt
         updatedAt
         __typename
@@ -112,6 +116,7 @@ subscription OnUpdateTeam($filter: ModelSubscriptionTeamFilterInput) {
         dateCreated
         taskState
         teamId
+        taskImageS3Key
         createdAt
         updatedAt
         __typename
@@ -137,6 +142,7 @@ subscription OnDeleteTeam($filter: ModelSubscriptionTeamFilterInput) {
         dateCreated
         taskState
         teamId
+        taskImageS3Key
         createdAt
         updatedAt
         __typename
