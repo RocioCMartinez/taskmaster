@@ -13,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.rocio.taskmaster.MainActivity;
 import com.rocio.taskmaster.R;
+import com.rocio.taskmaster.activities.AddTaskActivity;
 import com.rocio.taskmaster.activities.TaskDetailsActivity;
 
 
@@ -30,6 +31,8 @@ import java.util.TimeZone;
 public class TaskListRecyclerViewAdapter extends RecyclerView.Adapter<TaskListRecyclerViewAdapter.TaskListViewHolder>{
 //    Step 2-3 cont.: Create a product list variable and constructor w/in the adapter
     List<Task> tasks;
+
+
 
     //    Step 3-2 cont.: Create a Task List variable and update constructor
     Context callingActivity;

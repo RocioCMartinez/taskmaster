@@ -8,6 +8,7 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -31,6 +32,7 @@ import com.rocio.taskmaster.activities.UserProfileActivity;
 import com.rocio.taskmaster.adapters.TaskListRecyclerViewAdapter;
 
 
+
 import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileWriter;
@@ -40,6 +42,7 @@ import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
     private static final String TAG = "MainActivity";
+
     public static final String TASK_NAME_EXTRA_TAG = "taskName";
     public static final String TASK_DESCRIPTION_TAG = "taskDescription";
 
@@ -62,6 +65,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 //        manualS3FileUpload();
         setUpUserProfileButton();
         updateTaskListFromDatabase();

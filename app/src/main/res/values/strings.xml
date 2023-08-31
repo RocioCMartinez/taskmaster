@@ -31,4 +31,6 @@
     <string name="login_title">Login</string>
     <string name="logout">Logout</string>
     <string name="add_task_image">Task image</string>
+    <string name="latitude">Latitude</string>
+    <string name="longitude">Longitude</string>
 </resources>

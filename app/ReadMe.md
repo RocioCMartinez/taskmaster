@@ -55,6 +55,11 @@ Day9:
 ![S3 Data Storage](src/main/images/S3FileStorage.png)
 ![Dynamo Task w/ S3 key](src/main/images/S3Data.png)
 
+Day10:
+Updating app to allow user location latitude and longitude values to display under task details
+![Location Permission/Method](src/main/images/Day10LocationPermission.png)
+![Task Details Page](src/main/images/Day10TaskDetails.png)
+
 ### Resources
 - Rey Oliva
 - Alex Chao
