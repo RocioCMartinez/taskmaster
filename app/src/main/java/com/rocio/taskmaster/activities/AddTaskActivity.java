@@ -4,12 +4,19 @@ import androidx.activity.result.ActivityResult;
 import androidx.activity.result.ActivityResultCallback;
 import androidx.activity.result.ActivityResultLauncher;
 import androidx.activity.result.contract.ActivityResultContracts;
+import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.preference.PreferenceManager;
 
+import android.Manifest;
 import android.annotation.SuppressLint;
 import android.content.Intent;
+import android.content.SharedPreferences;
+import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.BitmapFactory;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.provider.OpenableColumns;
@@ -29,22 +36,36 @@ import com.amplifyframework.core.model.temporal.Temporal;
 import com.amplifyframework.datastore.generated.model.Task;
 import com.amplifyframework.datastore.generated.model.TaskStateEnum;
 import com.amplifyframework.datastore.generated.model.Team;
+import com.google.android.gms.location.FusedLocationProviderClient;
+import com.google.android.gms.location.LocationCallback;
+import com.google.android.gms.location.LocationRequest;
+import com.google.android.gms.location.LocationResult;
+import com.google.android.gms.location.LocationServices;
+import com.google.android.gms.location.Priority;
+import com.google.android.gms.tasks.CancellationToken;
+import com.google.android.gms.tasks.OnTokenCanceledListener;
 import com.rocio.taskmaster.R;
 
 
 import java.io.FileNotFoundException;
+import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 public class AddTaskActivity extends AppCompatActivity {
     private final String TAG = "AddTaskActivity";
+
+    private FusedLocationProviderClient fusedLocationProviderClient;
+
+    private Geocoder geocoder;
     private String s3ImageKey = ""; // holds the image S3 key if one currently exists in this activity, or the empty String if there is no image picked in this activity currently
 
-
+    SharedPreferences preferences;
     ActivityResultLauncher<Intent> activityResultLauncher;
 
     CompletableFuture<List<Team>> teamsFuture = null;
@@ -64,8 +85,12 @@ public class AddTaskActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_add_task);
 
+        preferences = PreferenceManager.getDefaultSharedPreferences(this);
+
         activityResultLauncher = getImagePickingActivityResultLauncher();
         teamsFuture = new CompletableFuture<>();
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
+        geocoder = new Geocoder(getApplicationContext(), Locale.getDefault());
 
         taskImageView = findViewById(R.id.AddTaskActivityTaskImageView);
         saveButton = findViewById(R.id.AddTaskActivityButton);
@@ -74,6 +99,7 @@ public class AddTaskActivity extends AppCompatActivity {
         taskBodyEditText = findViewById(R.id.AddTaskActivityDescription);
         taskTeamSpinner = findViewById(R.id.AddTaskTeamSpinner);
 
+//        startTrackingUserLocation();
         setupTaskImageView();
         setUpTaskStateSpinner();
         setUpTaskTeamSpinner();
@@ -81,9 +107,7 @@ public class AddTaskActivity extends AppCompatActivity {
     }
 
     void setupTaskImageView(){
-        taskImageView.setOnClickListener(view -> {
-            launchImageSelectionIntent();
-        });
+        taskImageView.setOnClickListener(view -> launchImageSelectionIntent());
     }
 
 
@@ -98,6 +122,9 @@ public class AddTaskActivity extends AppCompatActivity {
     void setUpAddTaskButton(){
 
         saveButton.setOnClickListener(view -> {
+            getUserLastLocation();
+//            getUserCurrentLocation();
+
             List<Team> teams = null;
             try {
                 teams = teamsFuture.get();
@@ -134,6 +161,116 @@ public class AddTaskActivity extends AppCompatActivity {
                 // Handle the case where no team is selected
             }
             Toast.makeText(AddTaskActivity.this, "Task saved!", Toast.LENGTH_SHORT).show();
+        });
+    }
+
+    void startTrackingUserLocation() {
+        LocationRequest locationRequest = new LocationRequest.Builder(
+                Priority.PRIORITY_HIGH_ACCURACY,
+                5000)
+                .build();
+
+        LocationCallback locationCallback = new LocationCallback() {
+            @Override
+            public void onLocationResult(@NonNull LocationResult locationResult) {
+                super.onLocationResult(locationResult);
+
+                try {
+                    String address = geocoder.getFromLocation(
+                                    locationResult.getLastLocation().getLatitude(),
+                                    locationResult.getLastLocation().getLongitude(),
+                                    1) // give us only the best guess
+                            .get(0) // grab the best guess from the list of Addresses
+                            .getAddressLine(0); // get the first line String from the Address object
+
+                    Log.i(TAG, "Repeating current location is: " + address);
+                } catch (IOException ioe) {
+                    Log.e(TAG, "Could not get subscribed location: " + ioe.getMessage(), ioe);
+                }
+            }
+        };
+
+        // checking for permissions before accessing location
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, getMainLooper());
+    }
+
+    void getUserLastLocation() {
+        // TODO: Ensure you have permission to access location before doing so
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+
+        fusedLocationProviderClient.getLastLocation().addOnSuccessListener(location -> {
+            if (location == null) {
+                Log.e(TAG, "Location callback was null");
+            }
+            String currentLatitude = Double.toString(location.getLatitude());
+            String currentLongitude = Double.toString(location.getLongitude());
+            Log.i(TAG, "User's last latitude: " + currentLatitude);
+            Log.i(TAG, "User's last longitude: " + currentLongitude);
+            SharedPreferences.Editor editor = preferences.edit();
+            editor.putString("currentLatitude", currentLatitude);
+            editor.putString("currentLongitude", currentLongitude);
+            editor.apply();
+            // For Lab39: Save these vars to be included as part of your Task object
+        });
+    }
+
+
+    void getUserCurrentLocation() {
+        fusedLocationProviderClient.flushLocations(); // <-- call this is you're not seeing location changes
+
+        // Make sure you have permissions before accessing a user's location!
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED && ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {
+            // TODO: Consider calling
+            //    ActivityCompat#requestPermissions
+            // here to request the missing permissions, and then overriding
+            //   public void onRequestPermissionsResult(int requestCode, String[] permissions,
+            //                                          int[] grantResults)
+            // to handle the case where the user grants the permission. See the documentation
+            // for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+
+        // grab the user's current location
+        fusedLocationProviderClient.getCurrentLocation(Priority.PRIORITY_HIGH_ACCURACY, new CancellationToken() {
+            @NonNull
+            @Override
+            public CancellationToken onCanceledRequested(@NonNull OnTokenCanceledListener onTokenCanceledListener) {
+                return null;
+            }
+
+            @Override
+            public boolean isCancellationRequested() {
+                return false;
+            }
+        }).addOnSuccessListener(location -> {
+            if (location == null) {
+                Log.e(TAG, "Location callback was null");
+            }
+            String currentLatitude = Double.toString(location.getLatitude());
+            String currentLongitude = Double.toString(location.getLongitude());
+            Log.i(TAG, "User's current latitude: " + currentLatitude);
+            Log.i(TAG, "User's current longitude: " + currentLongitude);
         });
     }
 

@@ -9,6 +9,18 @@
     tools:context=".activities.TaskDetailsActivity">
 
     <TextView
+        android:id="@+id/TaskDetailsActivityLatitudeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/latitude"
+        android:textColor="#263238"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TaskDetailsActivityTaskDescription" />
+
+    <TextView
         android:id="@+id/TaskDetailsActivityTaskLabel"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -46,4 +58,16 @@
         app:layout_constraintTop_toBottomOf="@+id/TaskDetailsActivityTaskLabel"
         app:srcCompat="@drawable/ic_launcher_background"
         tools:ignore="ImageContrastCheck" />
+
+    <TextView
+        android:id="@+id/TaskDetailsActivityLongitudeTextView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="48dp"
+        android:text="@string/longitude"
+        android:textColor="#263238"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/TaskDetailsActivityLatitudeTextView" />
 </androidx.constraintlayout.widget.ConstraintLayout>

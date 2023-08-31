@@ -1,8 +1,10 @@
 package com.rocio.taskmaster.activities;
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.preference.PreferenceManager;
 
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
 import android.os.Bundle;
 import android.util.Log;
@@ -25,6 +27,14 @@ public class TaskDetailsActivity extends AppCompatActivity {
     String s3ImageKey;
     ImageView taskImageView;
 
+    TextView latitudeTextView;
+
+    TextView longitudeTextView;
+
+    String longitude;
+
+    String latitude;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -33,6 +43,13 @@ public class TaskDetailsActivity extends AppCompatActivity {
         callingIntent = getIntent();
 
         taskImageView = findViewById(R.id.TaskDetailsActivityImageView);
+
+        latitudeTextView = findViewById(R.id.TaskDetailsActivityLatitudeTextView);
+        longitudeTextView = findViewById(R.id.TaskDetailsActivityLongitudeTextView);
+
+        SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
+        latitude = preferences.getString("currentLatitude", "N/A");
+        longitude = preferences.getString("currentLongitude", "N/A");
 
         setupTaskImageView();
         setupTaskDetails();
@@ -81,9 +98,12 @@ public class TaskDetailsActivity extends AppCompatActivity {
         Intent callingIntent = getIntent();
         String taskNameString = null;
         String taskDescriptionString = null;
+
+
         if (callingIntent != null){
             taskNameString = callingIntent.getStringExtra(MainActivity.TASK_NAME_EXTRA_TAG);
             taskDescriptionString = callingIntent.getStringExtra(MainActivity.TASK_DESCRIPTION_TAG);
+
         }
 
         TextView taskNameTextView = (TextView) findViewById(R.id.TaskDetailsActivityTaskLabel);
@@ -100,6 +120,8 @@ public class TaskDetailsActivity extends AppCompatActivity {
             taskDescriptionTextView.setText(R.string.no_task_description);
         }
 
+        latitudeTextView.setText("Latitude: " + latitude);
+        longitudeTextView.setText("Longitude: " + longitude);
 
     }
 }
