@@ -29,6 +29,11 @@ export type AmplifyDependentResourcesAttributes = {
       "language": "string",
       "region": "string",
       "voice": "string"
+    },
+    "translateTextcbdfdd66": {
+      "region": "string",
+      "sourceLang": "string",
+      "targetLang": "string"
     }
   },
   "storage": {

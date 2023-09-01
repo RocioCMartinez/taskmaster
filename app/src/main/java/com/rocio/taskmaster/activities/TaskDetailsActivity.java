@@ -156,6 +156,11 @@ public class TaskDetailsActivity extends AppCompatActivity {
                     result -> playAudio(result.getAudioData()),
                     error -> Log.e(TAG, "Audio conversion of task description text failed", error)
             );
+
+            Amplify.Predictions.translateText(combinedText,
+                    result -> Log.i("MyAmplifyApp", result.getTranslatedText()),
+                    error -> Log.e("MyAmplifyApp", "Translation failed", error)
+            );
         });
     }
 

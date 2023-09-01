@@ -58,6 +58,11 @@
       "convertType": "speechGenerator",
       "providerPlugin": "awscloudformation",
       "service": "Polly"
+    },
+    "translateTextcbdfdd66": {
+      "convertType": "translateText",
+      "providerPlugin": "awscloudformation",
+      "service": "Translate"
     }
   },
   "storage": {
