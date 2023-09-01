@@ -60,6 +60,12 @@ Updating app to allow user location latitude and longitude values to display und
 ![Location Permission/Method](src/main/images/Day10LocationPermission.png)
 ![Task Details Page](src/main/images/Day10TaskDetails.png)
 
+Day11:
+Added text to speech functionality and text translation to task details page.
+Translation of task description can be seen in Logcat when task description play button is pressed.
+![AWS Pinpoint](src/main/images/AWSPinpoint.png)
+![Task Details Page](src/main/images/Day11TaskDetailsPage.png)
+
 ### Resources
 - Rey Oliva
 - Alex Chao

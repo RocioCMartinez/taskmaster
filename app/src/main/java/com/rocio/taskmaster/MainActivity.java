@@ -23,6 +23,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 
+import com.amplifyframework.analytics.AnalyticsEvent;
 import com.amplifyframework.api.graphql.model.ModelQuery;
 import com.amplifyframework.core.Amplify;
 import com.amplifyframework.datastore.generated.model.Task;
@@ -38,6 +39,7 @@ import java.io.File;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 public class MainActivity extends AppCompatActivity {
@@ -65,6 +67,7 @@ public class MainActivity extends AppCompatActivity {
 
         preferences = PreferenceManager.getDefaultSharedPreferences(this);
 
+        logAppStartup();
         requestPermissions(new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, 1);
 //        manualS3FileUpload();
         setUpUserProfileButton();
@@ -91,6 +94,16 @@ public class MainActivity extends AppCompatActivity {
             Intent goToUserProfileActivityIntent = new Intent(MainActivity.this, UserProfileActivity.class);
             startActivity(goToUserProfileActivityIntent);
         });
+    }
+
+    void logAppStartup() {
+        AnalyticsEvent event = AnalyticsEvent.builder()
+                .name("openedApp")
+                .addProperty("time", Long.toString(new Date().getTime()))
+                .addProperty("trackingEvent", "Main activity opened")
+                .build();
+
+        Amplify.Analytics.recordEvent(event);
     }
 
     @SuppressLint("SetTextI18n")

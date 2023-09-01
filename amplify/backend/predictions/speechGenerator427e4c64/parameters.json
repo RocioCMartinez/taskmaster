@@ -1,0 +1,14 @@
+{
+    "resourceName": "speechGenerator427e4c64",
+    "convertPolicyName": "speechGeneratorPolicy427e4c64",
+    "authRoleName": {
+        "Ref": "AuthRoleName"
+    },
+    "unauthRoleName": {
+        "Ref": "UnauthRoleName"
+    },
+    "convertType": "speechGenerator",
+    "language": "en-US",
+    "voice": "Ivy",
+    "access": "authAndGuest"
+}
