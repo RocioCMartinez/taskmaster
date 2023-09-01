@@ -6,8 +6,10 @@ import androidx.preference.PreferenceManager;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -18,18 +20,30 @@ import com.rocio.taskmaster.MainActivity;
 import com.rocio.taskmaster.R;
 
 import java.io.File;
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.OutputStream;
 
 public class TaskDetailsActivity extends AppCompatActivity {
     private static final String TAG = "TaskDetailsActivity";
+    private final MediaPlayer mp = new MediaPlayer();
 
     Intent callingIntent;
     Task currentTask;
     String s3ImageKey;
     ImageView taskImageView;
 
+    TextView taskNameTextView;
+
+    TextView taskDescriptionTextView;
+
     TextView latitudeTextView;
 
     TextView longitudeTextView;
+
+    Button playDescriptionButton;
 
     String longitude;
 
@@ -44,6 +58,12 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         taskImageView = findViewById(R.id.TaskDetailsActivityImageView);
 
+        taskNameTextView = findViewById(R.id.TaskDetailsActivityTaskLabel);
+
+        taskDescriptionTextView = findViewById(R.id.TaskDetailsActivityTaskDescription);
+
+        playDescriptionButton = findViewById(R.id.TaskDetailsActivityDescriptionButton);
+
         latitudeTextView = findViewById(R.id.TaskDetailsActivityLatitudeTextView);
         longitudeTextView = findViewById(R.id.TaskDetailsActivityLongitudeTextView);
 
@@ -53,6 +73,7 @@ public class TaskDetailsActivity extends AppCompatActivity {
 
         setupTaskImageView();
         setupTaskDetails();
+        setupPlayDetailsButton();
     }
 
     void setupTaskImageView(){
@@ -123,5 +144,42 @@ public class TaskDetailsActivity extends AppCompatActivity {
         latitudeTextView.setText("Latitude: " + latitude);
         longitudeTextView.setText("Longitude: " + longitude);
 
+    }
+
+    void setupPlayDetailsButton(){
+        playDescriptionButton.setOnClickListener(view -> {
+            String taskName = taskNameTextView.getText().toString();
+            String taskDescription = taskDescriptionTextView.getText().toString();
+            String combinedText = taskName + ". " + taskDescription;
+            Amplify.Predictions.convertTextToSpeech(
+                    combinedText,
+                    result -> playAudio(result.getAudioData()),
+                    error -> Log.e(TAG, "Audio conversion of task description text failed", error)
+            );
+        });
+    }
+
+    private void playAudio(InputStream data) {
+        File mp3File = new File(getCacheDir(), "audio.mp3");
+
+        try(OutputStream out = new FileOutputStream(mp3File)) {
+            byte[] buffer = new byte[8 * 1024];
+            int bytesRead;
+
+            while((bytesRead = data.read(buffer)) != -1) {
+                out.write(buffer, 0, bytesRead);
+            }
+
+            Log.i(TAG, "audio file finished reading");
+
+            mp.reset();
+            mp.setOnPreparedListener(MediaPlayer::start);
+            mp.setDataSource(new FileInputStream(mp3File).getFD());
+            mp.prepareAsync();
+
+            Log.i(TAG, "Audio played successfully");
+        } catch (IOException ioe) {
+            Log.e(TAG, "Error writing audio file", ioe);
+        }
     }
 }
